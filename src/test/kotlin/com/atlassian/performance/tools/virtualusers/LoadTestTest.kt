@@ -1,6 +1,5 @@
 package com.atlassian.performance.tools.virtualusers
 
-import com.atlassian.performance.tools.jiraactions.api.memories.User
 import com.atlassian.performance.tools.virtualusers.api.VirtualUserLoad
 import com.atlassian.performance.tools.virtualusers.api.VirtualUserOptions
 import com.atlassian.performance.tools.virtualusers.api.browsers.Browser
@@ -8,6 +7,7 @@ import com.atlassian.performance.tools.virtualusers.api.browsers.CloseableRemote
 import com.atlassian.performance.tools.virtualusers.api.config.VirtualUserBehavior
 import com.atlassian.performance.tools.virtualusers.api.config.VirtualUserTarget
 import com.atlassian.performance.tools.virtualusers.mock.RemoteWebDriverMock
+import com.atlassian.performance.tools.virtualusers.mock.VirtualUserGeneratorMock
 import com.atlassian.performance.tools.virtualusers.mock.WebElementMock
 import net.jcip.annotations.ThreadSafe
 import org.assertj.core.api.Assertions.assertThat
@@ -24,7 +24,7 @@ class LoadTestTest {
      * Prevents concurrent shared global state mutations if the test methods are concurrent.
      */
     private val globalStateLock = Object()
-    private val userGenerator = HardcodedUserGenerator()
+    private val userGenerator = VirtualUserGeneratorMock()
 
     @Test
     fun shouldRunLoadTestWithoutExceptions() {
@@ -139,15 +139,6 @@ class LoadTestTest {
         ),
         userGenerator = userGenerator
     )
-
-    private class HardcodedUserGenerator : UserGenerator {
-
-        val usersCreated = AtomicInteger(0)
-
-        override fun generateUser(options: VirtualUserOptions): User {
-            return User("admin-${usersCreated.incrementAndGet()}", "admin")
-        }
-    }
 
     internal class TestWebDriver : RemoteWebDriverMock(mapOf(By.id("footer-build-information") to listOf(WebElementMock("jira-node"))))
 

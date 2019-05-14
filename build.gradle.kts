@@ -89,6 +89,7 @@ dependencies {
 
     testCompile("junit:junit:4.12")
     testCompile("org.assertj:assertj-core:3.11.0")
+    testCompile("org.mockito:mockito-core:2.27.0")
     testCompile("com.atlassian.performance.tools:docker-infrastructure:0.1.2")
     testCompile("com.github.docker-java:docker-java:3.1.1")
     testCompile("com.atlassian.performance.tools:infrastructure:[4.0.0,5.0.0)")

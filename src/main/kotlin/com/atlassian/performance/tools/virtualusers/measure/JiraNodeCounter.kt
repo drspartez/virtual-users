@@ -8,12 +8,12 @@ import java.lang.Exception
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
-internal class JiraNodeCounter {
+internal open class JiraNodeCounter {
 
     private val counter: MutableMap<String, AtomicInteger> = ConcurrentHashMap()
     private val logger: Logger = LogManager.getLogger(this::class.java)
 
-    fun count(node: ApplicationNode) {
+    open fun count(node: ApplicationNode) {
         val nodeId = try {
             node.identify()
         } catch (exception: Exception) {
@@ -25,7 +25,7 @@ internal class JiraNodeCounter {
             .incrementAndGet()
     }
 
-    fun dump(
+    open fun dump(
         target: Appendable
     ) {
         val printer = CSVPrinter(target, CSVFormat.DEFAULT)

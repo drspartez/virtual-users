@@ -35,13 +35,13 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 internal class LoadTest(
     private val options: VirtualUserOptions,
-    userGenerator: UserGenerator
+    userGenerator: UserGenerator,
+    private val nodeCounter : JiraNodeCounter = JiraNodeCounter()
 ) {
     private val logger: Logger = LogManager.getLogger(this::class.java)
     private val behavior = options.behavior
     private val target = options.target
     private val workspace = Paths.get("test-results")
-    private val nodeCounter = JiraNodeCounter()
     private val random = SeededRandom(behavior.seed)
     private val diagnosisPatience = DiagnosisPatience(Duration.ofSeconds(5))
     private val diagnosisLimit = DiagnosisLimit(behavior.diagnosticsLimit)
@@ -59,6 +59,7 @@ internal class LoadTest(
             password = target.password
         )
     )
+
     private val load = behavior.load
 
     fun run() {
@@ -72,6 +73,10 @@ internal class LoadTest(
             nodeCounter.dump(it)
         }
         logger.debug("Dumped node's counts to $nodesDump")
+    }
+
+    fun getScenario() : Scenario {
+        return this.scenario;
     }
 
     private fun setUpJira() {
